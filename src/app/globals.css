@@ -1,0 +1,86 @@
+@import 'tailwindcss';
+
+:root {
+  --bg-primary: #0b0e15;
+  --text-primary: #f4efe7;
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-playfair);
+  --font-mono: var(--font-geist-mono);
+}
+
+@theme inline {
+  --color-bg-primary: var(--bg-primary);
+  --color-text-primary: var(--text-primary);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+}
+
+html {
+  background: var(--bg-primary);
+}
+
+html[lang="ko"] {
+  word-break: keep-all;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*:focus-visible {
+  outline: 2px solid #f0cf9d;
+  outline-offset: 2px;
+}
+
+.waitlist-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-position: center center;
+  background-size: 32px 32px;
+  mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+}
+
+.waitlist-orb {
+  animation: waitlist-float 14s ease-in-out infinite;
+}
+
+@keyframes waitlist-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(0, 18px, 0) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waitlist-orb {
+    animation: none;
+  }
+}
+
+.waitlist-headline {
+  background: linear-gradient(180deg, #ffffff 0%, #e0d5c5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.waitlist-cta-btn {
+  box-shadow: 0 0 30px rgba(240, 207, 157, 0.15), 0 0 60px rgba(240, 207, 157, 0.05);
+}
+
+.waitlist-cta-btn:hover {
+  box-shadow: 0 0 40px rgba(240, 207, 157, 0.25), 0 0 80px rgba(240, 207, 157, 0.08);
+}
