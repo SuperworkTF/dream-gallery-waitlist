@@ -3,9 +3,14 @@
 :root {
   --bg-primary: #0b0e15;
   --text-primary: #f4efe7;
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-playfair);
-  --font-mono: var(--font-geist-mono);
+  --color-highlight: #f0cf9d;
+  --accent-tan: #c4a882;
+  --accent-blue: #7b8db8;
+  --accent-glow: rgba(240, 207, 157, 0.35);
+  --font-cjk: var(--font-noto-serif-kr), var(--font-noto-sans-sc), var(--font-noto-sans-jp);
+  --font-sans: var(--font-outfit), var(--font-inter), var(--font-cjk), 'Outfit', sans-serif;
+  --font-display: var(--font-playfair), var(--font-cjk), serif;
+  --font-mono: var(--font-jetbrains-mono), var(--font-geist-mono), var(--font-cjk), monospace;
 }
 
 @theme inline {
@@ -18,6 +23,7 @@
 
 html {
   background: var(--bg-primary);
+  scroll-behavior: smooth;
 }
 
 html[lang="ko"] {
@@ -36,51 +42,205 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid #f0cf9d;
+  outline: 2px solid var(--color-highlight);
   outline-offset: 2px;
 }
 
-.waitlist-grid {
+/* ── Sections ── */
+.full-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ── Grid background ── */
+.metro-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-position: center center;
-  background-size: 32px 32px;
-  mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+    linear-gradient(var(--color-highlight) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-highlight) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.03;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 20%, transparent 80%);
 }
 
-.waitlist-orb {
-  animation: waitlist-float 14s ease-in-out infinite;
+/* ── Noise overlay ── */
+.metro-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
 }
 
-@keyframes waitlist-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate3d(0, 18px, 0) scale(1.05);
-  }
+/* ── Pulse dot on logo ── */
+.pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-highlight);
+  margin-left: 2px;
+  vertical-align: super;
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .waitlist-orb {
-    animation: none;
-  }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
 }
 
-.waitlist-headline {
-  background: linear-gradient(180deg, #ffffff 0%, #e0d5c5 100%);
+/* ── Fade-up reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.3s; }
+.reveal-delay-3 { transition-delay: 0.45s; }
+
+/* ── Feature card left border animation ── */
+.feature-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 2px;
+  background: var(--color-highlight);
+  height: 0;
+  transition: height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              top 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.feature-card:hover::before {
+  height: 100%;
+  top: 0;
+}
+
+/* ── Hero headline gradient ── */
+.metro-headline {
+  background: linear-gradient(180deg, #ffffff 30%, #e0d5c5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.waitlist-cta-btn {
-  box-shadow: 0 0 30px rgba(240, 207, 157, 0.15), 0 0 60px rgba(240, 207, 157, 0.05);
+/* ── CTA button ── */
+.metro-cta-btn {
+  background: var(--color-highlight);
+  color: #1a1308;
+  box-shadow: 0 0 24px var(--accent-glow), 0 0 60px rgba(240, 207, 157, 0.1);
+  transition: all 0.3s ease;
 }
 
-.waitlist-cta-btn:hover {
-  box-shadow: 0 0 40px rgba(240, 207, 157, 0.25), 0 0 80px rgba(240, 207, 157, 0.08);
+.metro-cta-btn:hover {
+  background: #f5d9ae;
+  box-shadow: 0 0 36px var(--accent-glow), 0 0 80px rgba(240, 207, 157, 0.18);
+  transform: translateY(-1px);
+}
+
+/* ── Radial glow behind hero ── */
+.hero-glow {
+  background: radial-gradient(ellipse 50% 40% at 50% 55%, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0.2;
+}
+
+/* ── Step screen cards ── */
+.step-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background: linear-gradient(170deg, #151b2c 0%, #0d1118 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s ease;
+}
+
+.step-screen:hover {
+  border-color: rgba(196, 168, 130, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* (perk-item handled inline) */
+
+/* ── Waveform animation ── */
+@keyframes waveform {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+.waveform-bar {
+  animation: waveform 1.4s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.waveform-bar:nth-child(2) { animation-delay: 0.12s; }
+.waveform-bar:nth-child(3) { animation-delay: 0.24s; }
+.waveform-bar:nth-child(4) { animation-delay: 0.36s; }
+.waveform-bar:nth-child(5) { animation-delay: 0.48s; }
+.waveform-bar:nth-child(6) { animation-delay: 0.6s; }
+.waveform-bar:nth-child(7) { animation-delay: 0.36s; }
+.waveform-bar:nth-child(8) { animation-delay: 0.24s; }
+.waveform-bar:nth-child(9) { animation-delay: 0.12s; }
+
+/* ── Phone float ── */
+@keyframes phone-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.phone-float {
+  animation: phone-float 5s ease-in-out infinite;
+}
+
+/* ── Mic pulse ── */
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 207, 157, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(240, 207, 157, 0); }
+}
+
+.mic-pulse {
+  animation: mic-pulse 2s ease-in-out infinite;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .pulse-dot,
+  .waveform-bar,
+  .phone-float {
+    animation: none;
+  }
 }
