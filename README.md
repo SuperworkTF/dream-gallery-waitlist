@@ -1,4 +1,4 @@
-# waitlist-gpt
+# waitlist
 
 Standalone Next.js waitlist app for Dream Gallery.
 
